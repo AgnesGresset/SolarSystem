@@ -1,4 +1,4 @@
-﻿namespace Sonnensystem
+﻿namespace SolarSystem
 {
     class Satellite
     {
