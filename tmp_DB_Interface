@@ -1,0 +1,85 @@
+using System.Data.SQLite;
+
+public interface IDataholdings(){
+	public list<Planet> planeten = new List<Planet>();
+	public list<Satelite> sateliten = new List<Satelite>();
+	public static string planet_Name;
+	public static string planet_ID;
+	public static string satelite_Name;
+	public static string satelite_ID;
+	
+	List<Planet> getAllPlanets();
+	List<Satelite> getAllSatelite();
+	
+	Planet getIndividualPlanet();
+	Satelite getIndividualSatelite();
+	
+	Planet savePlanet(Planet);
+	Satelite saveSatelite(Satelite);
+	
+	void updatePlanet(Planet);
+	void updateSatelite(Satelite);
+	
+	void deletePlanet(planet_ID);
+	void deleteSatelite(satelite_ID);
+}
+	
+public class DbCreate : IDBHaltung
+{	
+	SQLiteConnection dbConnection;
+	SQLiteCommand command;
+	string sqlCommand;
+	string dbPath = System.Environment.CurrentDirectory + "\\DB";
+	string dbFilePath;
+
+	public void createDbFile()
+	{
+		if (!string.IsNullOrEmpty(dbPath) && !Directory.Exists(dbPath))
+		{
+			Directory.CreateDirectory(dbPath);
+		}
+		dbFilePath = dbPath + "\\yourDb.db";
+		if (!System.IO.File.Exists(dbFilePath))
+		{
+			SQLiteConnection.CreateFile(dbFilePath);
+		}
+	}
+
+	public string createDbConnection()
+	{
+		string strCon = string.Format("Data Source={0};", dbFilePath);
+		dbConnection = new SQLiteConnection(strCon);
+		dbConnection.Open();
+		command = dbConnection.CreateCommand();
+		return strCon;
+	}
+	
+	public list<Planet> getPlanets(){
+		
+	}
+	
+	public List<Planet> getAllPlanets(){
+		
+	}
+	public List<Satelite> getAllSatelite(){
+		
+	}
+	public Planet getIndividualPlanet(){
+		
+	}
+	public Satelite getIndividualSatelite(){
+		
+	}
+	public Planet savePlanet(Planet)(){
+		
+	}
+	public Planet saveSatelite(Satelite)(){
+		
+	}
+	public void updatePlanet(Planet){
+		
+	}
+	public void updateSatelite(Satelite){
+		
+	}
+}
