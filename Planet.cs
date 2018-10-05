@@ -9,7 +9,7 @@ namespace SolarSystem
     class Planet : SolarSystemInterface
     {
         private string Name { get; set; }
-        Satellite satellite = new Satellite();
+        public List<Satellite> Satellites { get; set; }
 
         public Planet()
         {
@@ -20,10 +20,10 @@ namespace SolarSystem
             Name = name;
         }
 
-        public Planet(string name, Satellite satellite)
+        public Planet(string name, List<Satellite> satellites)
         {
             Name = name;
-            this.satellite = satellite;
+            Satellites = satellites;
         }
 
         public void sortPlanets()
