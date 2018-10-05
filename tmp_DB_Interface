@@ -24,7 +24,7 @@ public interface IDataholdings(){
 	void deleteSatelite(satelite_ID);
 }
 	
-public class DbCreate : IDBHaltung
+public class DbCreate : IDataholdings
 {	
 	SQLiteConnection dbConnection;
 	SQLiteCommand command;
