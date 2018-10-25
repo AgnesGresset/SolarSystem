@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
 using System.Linq;
@@ -38,7 +38,7 @@ namespace WpfApp1
     public class Planet
     {
         public string planet_Name;
-        public string planet_ID;
+        public int planet_ID;
     }
     public class Satellite
     {
@@ -73,18 +73,23 @@ namespace WpfApp1
         }
         public Planet GetIndividualPlanet(Planet planet)
         {
+            Planet individualPlanet = new Planet();
             using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
             {
-                var output = cnn.Execute("select * from Planets where ID = @planet_ID", planet);
-                return null;
+                individualPlanet.planet_ID = cnn.Execute("select ID from Planets where ID = @planet_ID", planet);
+                individualPlanet.planet_Name = cnn.Execute("select Name from Planets where ID = @planet_ID", planet).ToString();
+                return individualPlanet;
             }
         }
         public Satellite GetIndividualSatellite(Satellite satellite)
         {
+            Satellite individualSatellite = new Satellite();
             using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
             {
-                var output = cnn.Execute("select * from Satellites where ID = @satellite_ID", satellite);
-                return null;
+                individualSatellite.satellite_Name = cnn.Execute("select Name from Satellites where ID = @satellite_ID", satellite).ToString();
+                individualSatellite.satellite_ID = cnn.Execute("select ID from Satellites where ID = @satellite_ID", satellite);
+                individualSatellite.planet_ID = cnn.Execute("select Planet_ID from Satellites where ID = @satellite_ID", satellite);
+                return individualSatellite;
             }
         }
         public void SavePlanet(Planet planet)
