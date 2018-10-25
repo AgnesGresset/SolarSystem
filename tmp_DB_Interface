@@ -1,85 +1,134 @@
+using System.Collections.Generic;
+using System.Data;
 using System.Data.SQLite;
+using System.Linq;
+using System.Configuration;
+using Dapper;
 
-public interface IDataholdings(){
-	public list<Planet> planeten = new List<Planet>();
-	public list<Satelite> sateliten = new List<Satelite>();
-	public static string planet_Name;
-	public static string planet_ID;
-	public static string satelite_Name;
-	public static string satelite_ID;
-	
-	List<Planet> getAllPlanets();
-	List<Satelite> getAllSatelite();
-	
-	Planet getIndividualPlanet();
-	Satelite getIndividualSatelite();
-	
-	Planet savePlanet(Planet);
-	Satelite saveSatelite(Satelite);
-	
-	void updatePlanet(Planet);
-	void updateSatelite(Satelite);
-	
-	void deletePlanet(planet_ID);
-	void deleteSatelite(satelite_ID);
-}
-	
-public class DbCreate : IDataholdings
-{	
-	SQLiteConnection dbConnection;
-	SQLiteCommand command;
-	string sqlCommand;
-	string dbPath = System.Environment.CurrentDirectory + "\\DB";
-	string dbFilePath;
+/**
+ *  1. db-Datei ins C# Projekt einbinden
+ *  2. NUGET-Packete Installieren (Dapper, SQLite-Core, System.Configuration)
+ *  3. App.Config dies hinzufügen:
+ *      <connectionStrings>
+ *          <add name="Default" connectionString="Data Source=.\db.db;Version=3;" providerName="System.data.SqlClient"/>
+ *       </connectionStrings>
+ *  4. Planet-Klasse & Satellite-Klasse in eigene .cs-Dateien tun
+ *  5. namespace name anpassen
+ **/
 
-	public void createDbFile()
-	{
-		if (!string.IsNullOrEmpty(dbPath) && !Directory.Exists(dbPath))
-		{
-			Directory.CreateDirectory(dbPath);
-		}
-		dbFilePath = dbPath + "\\yourDb.db";
-		if (!System.IO.File.Exists(dbFilePath))
-		{
-			SQLiteConnection.CreateFile(dbFilePath);
-		}
-	}
+namespace WpfApp1
+{
+    public interface IDataholdings {
 
-	public string createDbConnection()
-	{
-		string strCon = string.Format("Data Source={0};", dbFilePath);
-		dbConnection = new SQLiteConnection(strCon);
-		dbConnection.Open();
-		command = dbConnection.CreateCommand();
-		return strCon;
-	}
-	
-	public list<Planet> getPlanets(){
-		
-	}
-	
-	public List<Planet> getAllPlanets(){
-		
-	}
-	public List<Satelite> getAllSatelite(){
-		
-	}
-	public Planet getIndividualPlanet(){
-		
-	}
-	public Satelite getIndividualSatelite(){
-		
-	}
-	public Planet savePlanet(Planet)(){
-		
-	}
-	public Planet saveSatelite(Satelite)(){
-		
-	}
-	public void updatePlanet(Planet){
-		
-	}
-	public void updateSatelite(Satelite){
-		
-	}
+        List<Planet> GetAllPlanets();
+        List<Satellite> GetAllSatellites();
+
+        Planet GetIndividualPlanet(Planet planet);
+        Satellite GetIndividualSatellite(Satellite satellite);
+
+        void SavePlanet(Planet planet);
+        void SaveSatellite(Satellite satellite);
+
+        void UpdatePlanet(Planet planet);
+        void UpdateSatellite(Satellite satellite);
+
+        void DeletePlanet(Planet planet);
+        void DeleteSatelite(Satellite satellite);
+    }
+
+    public class Planet
+    {
+        public string planet_Name;
+        public string planet_ID;
+    }
+    public class Satellite
+    {
+        public string satellite_Name;
+        public int satellite_ID;
+        public int planet_ID;
+    }
+
+    public class dataAccess : IDataholdings
+    {
+        public static string LoadConnectionString(string id = "Default")
+        {
+            return ConfigurationManager.ConnectionStrings[id].ConnectionString;
+        }
+
+        public List<Planet> GetAllPlanets()
+        {
+            using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
+            {
+                var output = cnn.Query<Planet>("select * from Planets", new DynamicParameters());
+                return output.ToList();
+            }
+        }
+
+        public List<Satellite> GetAllSatellites()
+        {
+            using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
+            {
+                var output = cnn.Query<Satellite>("select * from Satellites", new DynamicParameters());
+                return output.ToList();
+            }
+        }
+        public Planet GetIndividualPlanet(Planet planet)
+        {
+            using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
+            {
+                var output = cnn.Execute("select * from Planets where ID = @planet_ID", planet);
+                return null;
+            }
+        }
+        public Satellite GetIndividualSatellite(Satellite satellite)
+        {
+            using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
+            {
+                var output = cnn.Execute("select * from Satellites where ID = @satellite_ID", satellite);
+                return null;
+            }
+        }
+        public void SavePlanet(Planet planet)
+        {
+            using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
+            {
+                cnn.Execute("insert into Planets (Name) values (@planet_Name)", planet);
+            }
+        }
+        public void SaveSatellite(Satellite satellite)
+        {
+            using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
+            {
+                cnn.Execute("insert into Planets (Name,Planet_ID) values (@satellite_Name,@planet_ID)", satellite);
+            }
+        }
+        public void UpdatePlanet(Planet planet)
+        {
+            using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
+            {
+                cnn.Execute("update table Planets set Name = @planet_Name where ID = @planet_ID", planet);
+            }
+        }
+        public void UpdateSatellite(Satellite satellite)
+        {
+            using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
+            {
+                cnn.Execute("update table Satellites set Name = @satellite_Name, Planet_ID = @planet_ID where ID = @satellite_ID", satellite);
+            }
+        }
+        public void DeletePlanet(Planet planet)
+        {
+            using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
+            {
+                cnn.Execute("delete from Planets where ID = @planet_ID", planet);
+            }
+        }
+        public void DeleteSatelite(Satellite satellite)
+        {
+            using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
+            {
+                cnn.Execute("delete from Satellites where ID = @satellite_ID", satellite);
+            }
+        }
+    }
 }
