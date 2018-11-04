@@ -15,12 +15,12 @@ using Dapper;
  *  4. Planet-Klasse & Satellite-Klasse in eigene .cs-Dateien tun
  **/
 
-namespace WpfApp1
+namespace SolarSystem
 {
     public interface IDataholdings {
 
         List<Planet> GetAllPlanets();
-        List<Satellite> GetAllSatellites(int planet_id);
+        List<Satellite> GetAllSatellites();
 
         Planet GetIndividualPlanet(Planet planet);
         Satellite GetIndividualSatellite(Satellite satellite);
@@ -63,14 +63,15 @@ namespace WpfApp1
             }
         }
 
-        public List<Satellite> GetAllSatellites(int planet_id)
+        public List<Satellite> GetAllSatellites()
         {
             using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
             {
-                var output = cnn.Query<Satellite>("select * from Satellites where planet_ID = @planet_id", planet_id);
+                var output = cnn.Query<Satellite>("select * from Satellites", new DynamicParameters());
                 return output.ToList();
             }
         }
+
         public Planet GetIndividualPlanet(Planet planet)
         {
             Planet individualPlanet = new Planet();
@@ -81,6 +82,7 @@ namespace WpfApp1
                 return individualPlanet;
             }
         }
+
         public Satellite GetIndividualSatellite(Satellite satellite)
         {
             Satellite individualSatellite = new Satellite();
@@ -92,6 +94,7 @@ namespace WpfApp1
                 return individualSatellite;
             }
         }
+
         public void SavePlanet(Planet planet)
         {
             using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
@@ -106,6 +109,7 @@ namespace WpfApp1
                 cnn.Execute("insert into Planets (Name,Planet_ID) values (@satellite_Name,@planet_ID)", satellite);
             }
         }
+
         public void UpdatePlanet(Planet planet)
         {
             using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
@@ -113,6 +117,7 @@ namespace WpfApp1
                 cnn.Execute("update table Planets set Name = @planet_Name where ID = @planet_ID", planet);
             }
         }
+
         public void UpdateSatellite(Satellite satellite)
         {
             using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
@@ -120,6 +125,7 @@ namespace WpfApp1
                 cnn.Execute("update table Satellites set Name = @satellite_Name, Planet_ID = @planet_ID where ID = @satellite_ID", satellite);
             }
         }
+
         public void DeletePlanet(Planet planet)
         {
             using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
@@ -127,7 +133,8 @@ namespace WpfApp1
                 cnn.Execute("delete from Planets where ID = @planet_ID", planet);
             }
         }
-        public void DeleteSatelite(Satellite satellite)
+
+        public void DeleteSatellite(Satellite satellite)
         {
             using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
             {
