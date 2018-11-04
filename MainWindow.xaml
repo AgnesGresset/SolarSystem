@@ -1,9 +1,9 @@
-﻿<Window x:Class="Sonnensystem.MainWindow"
+﻿<Window x:Class="SolarSystem.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Sonnensystem"
+        xmlns:local="clr-namespace:SolarSystem"
         mc:Ignorable="d"
         Title="MainWindow" 
         Height="350" 
@@ -25,9 +25,12 @@
                    Grid.ColumnSpan="3"
                    HorizontalAlignment="Center"
                    Text="Das Sonnensystem"/>
-        <ComboBox Grid.Column="0"
+        <ComboBox x:name = "planetListingComboBox"
+                  SelectionChanged = "planetListingComboBox_SelectionChanged"
+                  Grid.Column="0"
                   Grid.Row="1"/>
-        <TextBlock Grid.Column="1"
+        <TextBlock x:name = "planetListing"
+                   Grid.Column="1"
                    Grid.Row="1"
                    HorizontalAlignment="Left"
                    Text="Erde"/>
