@@ -20,7 +20,7 @@ namespace WpfApp1
     public interface IDataholdings {
 
         List<Planet> GetAllPlanets();
-        List<Satellite> GetAllSatellites();
+        List<Satellite> GetAllSatellites(int planet_id);
 
         Planet GetIndividualPlanet(Planet planet);
         Satellite GetIndividualSatellite(Satellite satellite);
@@ -63,11 +63,11 @@ namespace WpfApp1
             }
         }
 
-        public List<Satellite> GetAllSatellites()
+        public List<Satellite> GetAllSatellites(int planet_id)
         {
             using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
             {
-                var output = cnn.Query<Satellite>("select * from Satellites", new DynamicParameters());
+                var output = cnn.Query<Satellite>("select * from Satellites where planet_ID = @planet_id", planet_id);
                 return output.ToList();
             }
         }
