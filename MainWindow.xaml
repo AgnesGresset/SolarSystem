@@ -25,9 +25,13 @@
                    Grid.ColumnSpan="3"
                    HorizontalAlignment="Center"
                    Text="Das Sonnensystem"/>
-        <ComboBox Grid.Column="0"
-                  Grid.Row="1"/>
-        <TextBlock Grid.Column="1"
+        <ComboBox Name="planetListingComboBox"
+                  Grid.Column="0"
+                  Grid.Row="1"
+                  SelectionChanged="planetListingComboBox_SelectionChanged">
+        </ComboBox>
+        <TextBlock Name="planetListing"
+                   Grid.Column="1"
                    Grid.Row="1"
                    HorizontalAlignment="Left"
                    Text="Erde"/>
