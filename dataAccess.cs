@@ -32,7 +32,7 @@ namespace SolarSystem
         void UpdateSatellite(Satellite satellite);
 
         void DeletePlanet(Planet planet);
-        void DeleteSatelite(Satellite satellite);
+        void DeleteSatellite(Satellite satellite);
     }
 
     public class Planet
