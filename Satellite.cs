@@ -1,4 +1,4 @@
-﻿namespace SolarSystem
+﻿namespace SolarSystemDraft
 {
     class Satellite
     {
