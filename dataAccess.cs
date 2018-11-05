@@ -102,6 +102,7 @@ namespace SolarSystem
                 cnn.Execute("insert into Planets (Name) values (@planet_Name)", planet);
             }
         }
+
         public void SaveSatellite(Satellite satellite)
         {
             using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
