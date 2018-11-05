@@ -25,9 +25,11 @@ namespace SolarSystem
             InitializeComponent();
         }
 
+        /*
         private void planetListingComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             planetListing.Text = planetListingComboBox.SelectedItem.ToString();
         }
+        */
     }
 }
